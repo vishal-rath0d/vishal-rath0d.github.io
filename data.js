@@ -7,21 +7,18 @@ export const personalInfo = {
     name: "Vishal Rathod",
     role: "DevOps Engineer",
     email: "vishaljanusingrathod@gmail.com",
-    phone: "+91 9765055747",
-    location: "Remote, India",
     tagline: "DevOps Engineer building cloud-native infrastructure at scale. Passionate about Kubernetes, automation, and making deployments boring.",
     
     social: {
         linkedin: "https://linkedin.com/in/vishalrath0d",
         github: "https://github.com/vishal-rath0d",
-        website: "https://vishal-rath0d.github.io",
         resume: "https://drive.google.com/file/d/1OeEnMCsl-AJ495mmvPa3623A9X1RoKur/view?usp=drive_link"
     }
 };
 
 export const about = {
     paragraphs: [
-        "I'm a DevOps Engineer with ~3 years of experience at <strong>SMS-Magic (Conversive)</strong>, where I've transitioned from backend development to owning platform infrastructure and CI/CD operations.",
+        "I'm a DevOps Engineer with 3 years of experience at <strong>SMS-Magic (Conversive)</strong>, where I've transitioned from backend development to owning platform infrastructure and CI/CD operations.",
         "My work focuses on building scalable cloud infrastructure, automating deployment pipelines, and optimizing system reliability. I've successfully reduced deployment times by 50%, cut infrastructure costs by 25%, and improved incident response by 40%.",
         "I'm passionate about cloud-native technologies and continuously expanding my expertise in Kubernetes, GitOps, and DevSecOps practices."
     ],
@@ -39,8 +36,8 @@ export const experience = [
         title: "DevOps Engineer",
         company: "SMS-Magic (Conversive)",
         location: "Remote, India",
-        dates: "Nov 2022 - Present",
         type: "Full-time",
+        dates: "Nov 2022 - Present",
         achievements: [
             "Built 20+ automated CI/CD pipelines using Jenkins and GitLab CI",
             "Containerized 20+ services with Docker and deployed on AWS ECS (Fargate + EC2)",
@@ -54,8 +51,8 @@ export const experience = [
         title: "Software Developer",
         company: "SMS-Magic (Conversive)",
         location: "Remote, India",
-        dates: "Aug 2021 - Nov 2022",
         type: "Full-time",
+        dates: "Aug 2021 - Nov 2022",
         achievements: [
             "Reduced API response time by 47% through database query optimization",
             "Improved web widget load time by 51% with asynchronous processing",
@@ -72,28 +69,28 @@ export const projects = [
         description: "Terraform modules and CloudFormation templates for AWS infrastructure provisioning and management. Includes VPC setup, ECS clusters, RDS, and S3 configurations.",
         tech: ["Terraform", "AWS", "IaC", "CloudFormation"],
         link: "https://github.com/vishal-rath0d",
-        featured: true
+        linkText: "View on GitHub →"
     },
     {
         name: "CI/CD Pipeline Templates",
         description: "Reusable Jenkins and GitLab CI pipeline configurations for container builds, testing, and deployments. Includes blue/green deployment strategies.",
         tech: ["Jenkins", "GitLab CI", "Docker", "AWS ECS"],
         link: "https://github.com/vishal-rath0d",
-        featured: true
+        linkText: "View on GitHub →"
     },
     {
         name: "Monitoring Stack",
         description: "Prometheus and Grafana deployment configurations with custom dashboards for infrastructure monitoring, alerting, and observability.",
         tech: ["Prometheus", "Grafana", "Observability", "Alerting"],
         link: "https://github.com/vishal-rath0d",
-        featured: true
+        linkText: "View on GitHub →"
     },
     {
         name: "Automation Scripts",
         description: "Python and Bash scripts for infrastructure automation, deployment workflows, log analysis, and operational tasks across AWS environments.",
         tech: ["Python", "Bash", "Automation", "AWS"],
         link: "https://github.com/vishal-rath0d",
-        featured: true
+        linkText: "View on GitHub →"
     }
 ];
 
@@ -123,18 +120,6 @@ export const skills = {
             name: "Data & Middleware",
             items: "MySQL, MongoDB, Redis, Elasticsearch, RabbitMQ"
         }
-    ],
-    
-    // Popular tech stack for badges
-    badges: [
-        { name: "AWS", icon: "aws", color: "FF9900" },
-        { name: "Docker", icon: "docker", color: "2496ED" },
-        { name: "Kubernetes", icon: "kubernetes", color: "326CE5" },
-        { name: "Terraform", icon: "terraform", color: "7B42BC" },
-        { name: "Jenkins", icon: "jenkins", color: "D24939" },
-        { name: "Python", icon: "python", color: "3776AB" },
-        { name: "GitLab", icon: "gitlab", color: "FCA121" },
-        { name: "Prometheus", icon: "prometheus", color: "E6522C" }
     ]
 };
 
@@ -154,11 +139,5 @@ export const education = [
 ];
 
 export const contact = {
-    intro: "Feel free to reach out for collaborations, opportunities, or just to chat about DevOps and cloud infrastructure.",
-    links: [
-        { label: "Email", url: "mailto:vishaljanusingrathod@gmail.com", type: "email" },
-        { label: "LinkedIn", url: "https://linkedin.com/in/vishalrath0d", type: "social" },
-        { label: "GitHub", url: "https://github.com/vishal-rath0d", type: "social" },
-        { label: "Download Resume", url: null, type: "resume" } // Update when PDF is ready
-    ]
+    intro: "Feel free to reach out for collaborations, opportunities, or just to chat about DevOps and cloud infrastructure."
 };

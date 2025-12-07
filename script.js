@@ -5,7 +5,6 @@ import {
     experience,
     projects,
     skills,
-    education,
     contact
 } from './data.js';
 
@@ -39,6 +38,7 @@ function populateContent() {
             <div class="work-header">
                 <h3 class="work-title">${job.title}</h3>
                 <span class="work-company">${job.company}</span>
+                <span class="work-meta">${job.location} • ${job.type}</span>
                 <span class="work-date">${job.dates}</span>
             </div>
             <ul class="work-details">
@@ -56,7 +56,7 @@ function populateContent() {
             <div class="project-tags">
                 ${project.tech.map(tech => `<span class="tag">${tech}</span>`).join('')}
             </div>
-            <a href="${project.link}" target="_blank" class="project-link">View on GitHub →</a>
+            <a href="${project.link}" target="_blank" class="project-link">${project.linkText}</a>
         </div>
     `).join('');
     
