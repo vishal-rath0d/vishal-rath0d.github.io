@@ -151,58 +151,77 @@ function initMobileMenu() {
 }
 
 // ===================================
-// Animated Flower/Particle Background
-// (Existing code - keeping as is)
+// Elegant Data Flow Waves
+// Smooth sine waves representing data streams & metrics
 // ===================================
 
-class Particle {
-    constructor(canvas) {
+class DataWave {
+    constructor(canvas, index, total) {
         this.canvas = canvas;
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 5 + 1;
-        this.speedX = Math.random() * 3 - 1.5;
-        this.speedY = Math.random() * 3 - 1.5;
-        this.color = this.getRandomColor();
+        this.index = index;
+        this.total = total;
+        this.phase = Math.random() * Math.PI * 2;
+        this.speed = 0.002 + Math.random() * 0.002;
+        this.amplitude = 50 + Math.random() * 100;
+        this.yOffset = canvas.height / 2;
     }
 
-    getRandomColor() {
-        const colors = [
-            'rgba(217, 190, 209, 0.6)',
-            'rgba(255, 182, 193, 0.5)',
-            'rgba(255, 192, 203, 0.4)',
-            'rgba(200, 162, 200, 0.5)',
-            'rgba(230, 190, 220, 0.4)'
-        ];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
+    draw(ctx, time, isDark, mouse) {
+        const opacity = isDark ? 0.15 : 0.1;
+        const color = isDark 
+            ? `hsla(${260 + this.index * 10}, 70%, 70%, ${opacity})` // Light purple/pink
+            : `hsla(${260 + this.index * 10}, 60%, 50%, ${opacity})`; // Darker purple
 
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x > this.canvas.width) this.x = 0;
-        if (this.x < 0) this.x = this.canvas.width;
-        if (this.y > this.canvas.height) this.y = 0;
-        if (this.y < 0) this.y = this.canvas.height;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = this.color;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+
+        const points = [];
+        for (let x = 0; x <= this.canvas.width; x += 50) {
+            let y = this.yOffset + 
+                Math.sin(x * 0.003 + this.phase + time * this.speed) * this.amplitude +
+                Math.sin(x * 0.01 + time * this.speed * 2) * (this.amplitude * 0.2);
+
+            // Mouse interaction
+            if (mouse.x !== null && mouse.y !== null) {
+                const dx = x - mouse.x;
+                const dy = y - mouse.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const interactionRadius = 400; // Increased radius
+
+                if (dist < interactionRadius) {
+                    const force = (interactionRadius - dist) / interactionRadius;
+                    // Waves "avoid" the mouse or get excited by it - much stronger effect now
+                    y += Math.sin(dist * 0.05 - time * 0.1) * force * 150; // Increased intensity (50 -> 150)
+                }
+            }
+
+            points.push({x, y});
+        }
+
+        // Smooth curve through points
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 0; i < points.length - 1; i++) {
+            const xc = (points[i].x + points[i + 1].x) / 2;
+            const yc = (points[i].y + points[i + 1].y) / 2;
+            ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+        }
+        // Connect to last point
+        ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+        
+        ctx.stroke();
     }
 }
 
-class FlowerEffect {
+class DataFlowWaves {
     constructor() {
         this.canvas = document.getElementById('flowerCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
-        this.numberOfParticles = 100;
-        this.mouse = { x: null, y: null, radius: 150 };
+        if (!this.canvas) return;
 
+        this.ctx = this.canvas.getContext('2d');
+        this.waves = [];
+        this.mouse = { x: null, y: null };
+        
         this.init();
         this.setupEventListeners();
         this.animate();
@@ -210,7 +229,7 @@ class FlowerEffect {
 
     init() {
         this.resizeCanvas();
-        this.createParticles();
+        this.createWaves();
     }
 
     resizeCanvas() {
@@ -218,83 +237,50 @@ class FlowerEffect {
         this.canvas.height = window.innerHeight;
     }
 
-    createParticles() {
-        this.particles = [];
-        for (let i = 0; i < this.numberOfParticles; i++) {
-            this.particles.push(new Particle(this.canvas));
+    createWaves() {
+        this.waves = [];
+        const waveCount = 5;
+        for (let i = 0; i < waveCount; i++) {
+            this.waves.push(new DataWave(this.canvas, i, waveCount));
         }
     }
 
     setupEventListeners() {
         window.addEventListener('resize', () => {
             this.resizeCanvas();
-            this.createParticles();
+            this.createWaves();
         });
 
-        window.addEventListener('mousemove', (e) => {
-            this.mouse.x = e.x;
-            this.mouse.y = e.y;
+        this.canvas.addEventListener('mousemove', (e) => {
+            this.mouse.x = e.clientX;
+            this.mouse.y = e.clientY;
         });
 
-        window.addEventListener('mouseout', () => {
+        this.canvas.addEventListener('mouseleave', () => {
             this.mouse.x = null;
             this.mouse.y = null;
         });
     }
 
-    connectParticles() {
-        for (let a = 0; a < this.particles.length; a++) {
-            for (let b = a + 1; b < this.particles.length; b++) {
-                const dx = this.particles[a].x - this.particles[b].x;
-                const dy = this.particles[a].y - this.particles[b].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < 100) {
-                    const opacity = 1 - (distance / 100);
-                    this.ctx.strokeStyle = `rgba(217, 190, 209, ${opacity * 0.2})`;
-                    this.ctx.lineWidth = 1;
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(this.particles[a].x, this.particles[a].y);
-                    this.ctx.lineTo(this.particles[b].x, this.particles[b].y);
-                    this.ctx.stroke();
-                }
-            }
-        }
-    }
-
-    handleMouseInteraction() {
-        if (this.mouse.x == null || this.mouse.y == null) return;
-
-        this.particles.forEach(particle => {
-            const dx = this.mouse.x - particle.x;
-            const dy = this.mouse.y - particle.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < this.mouse.radius) {
-                const force = (this.mouse.radius - distance) / this.mouse.radius;
-                const directionX = dx / distance;
-                const directionY = dy / distance;
-                
-                particle.x -= directionX * force * 2;
-                particle.y -= directionY * force * 2;
-            }
-        });
-    }
-
     animate() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.time = (this.time || 0) + 1;
+        const isDark = document.documentElement.hasAttribute('data-theme');
 
-        this.particles.forEach(particle => {
-            particle.update();
-            particle.draw(this.ctx);
+        // Clear canvas
+        this.ctx.fillStyle = isDark ? '#0a0a0a' : '#ffffff';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Draw waves
+        this.waves.forEach(wave => {
+            wave.draw(this.ctx, this.time, isDark, this.mouse);
         });
-
-        this.connectParticles();
-        this.handleMouseInteraction();
 
         requestAnimationFrame(() => this.animate());
     }
 }
+
+// Alias for initialization
+class FlowerEffect extends DataFlowWaves {}
 
 // ===================================
 // Smooth Scrolling
