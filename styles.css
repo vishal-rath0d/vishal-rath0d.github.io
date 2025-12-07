@@ -15,6 +15,20 @@
     --border-color: #e0e0e0;
     --font-serif: 'Playfair Display', Georgia, serif;
     --font-sans: 'Inter', -apple-system, sans-serif;
+    --card-bg: #ffffff;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode colors */
+[data-theme="dark"] {
+    --bg-color: #0a0a0a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent-color: #ffffff;
+    --border-color: #2a2a2a;
+    --card-bg: #151515;
+    --nav-bg: rgba(10, 10, 10, 0.95);
 }
 
 html {
@@ -50,7 +64,7 @@ body {
     top:0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--nav-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
     z-index: 100;
@@ -94,6 +108,79 @@ body {
 
 .nav-link:hover {
     color: var(--text-primary);
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Floating Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    border-color: var(--text-primary);
+}
+
+.theme-toggle .sun-icon {
+    display: block;
+    color: var(--text-primary);
+}
+
+.theme-toggle .moon-icon {
+    display: none;
+    color: var(--text-primary);
+}
+
+.theme-toggle.dark .sun-icon {
+    display: none;
+}
+
+.theme-toggle.dark .moon-icon {
+    display: block;
 }
 
 /* =====================================
@@ -239,6 +326,7 @@ body {
 .metric-card {
     text-align: center;
     padding: 2rem 1rem;
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 4px;
     transition: transform 0.3s ease, border-color 0.3s ease;
@@ -280,6 +368,7 @@ body {
 }
 
 .project-card {
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
     padding: 2rem;
     border-radius: 4px;
@@ -359,6 +448,45 @@ body {
 }
 
 /* ====================================
+   Resume Section
+   ===================================== */
+.resume-intro {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.resume-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.resume-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--text-primary);
+    color: var(--bg-color);
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid var(--text-primary);
+}
+
+.resume-button:hover {
+    background: transparent;
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+.resume-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ====================================
    Contact Section
    ===================================== */
 .contact-intro {
@@ -382,17 +510,7 @@ body {
     opacity: 0.6;
 }
 
-.contact-link-resume {
-    background: var(--text-primary);
-    color: var(--bg-color);
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
-    text-decoration: none;
-}
 
-.contact-link-resume:hover {
-    opacity: 0.8;
-}
 
 /* =====================================
    Footer
@@ -413,8 +531,32 @@ body {
    Responsive Design
    ===================================== */
 @media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+        order: 2;
+    }
+
     .nav-menu {
-        gap: 1.5rem;
+        position: fixed;
+        left: -100%;
+        top: 75px;
+        flex-direction: column;
+        background-color: var(--nav-bg);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+        padding: 2rem 0;
+        gap: 1rem;
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .dark-mode-toggle-container {
+        justify-content: center;
+        margin-top: 1rem;
     }
 
     .hero-section {
